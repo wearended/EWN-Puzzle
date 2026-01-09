@@ -13,9 +13,16 @@ public class HumanPlayer extends Player{
     // and constructors needed for your implementation.
 
     Scanner sc = new Scanner(System.in);
+    GameState Game;
     String Name;
+    
     public HumanPlayer(String Name){
         this.Name = Name;
+    }
+
+    @Override
+    public void JoinGame(GameState JoiningGame){
+        Game = JoiningGame;
     }
 
     @Override

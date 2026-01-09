@@ -17,8 +17,31 @@ public class AIPlayer extends Player{
     // You may also add any other helper functions, variables,
     // and constructors needed for your implementation.
 
+    GameState Game;
     String Name;
+    
     public AIPlayer(){
         this.Name = "AI Player";
+    }
+
+    @Override
+    public void JoinGame(GameState JoiningGame){
+        Game = JoiningGame;
+    }
+
+    @Override
+    public int choosePiece(boolean[] MovablePieces){
+        int chosenPiece = 1;
+
+        return chosenPiece;
+    }
+
+    @Override
+    public int chooseMove(int[] PiecePossibleMoves, int ChosenPiece){
+        int chosenMove = 0;
+        
+        System.out.println("\nAI Player Chose: " + chosenMove);
+
+        return chosenMove;
     }
 }
