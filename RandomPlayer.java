@@ -16,8 +16,8 @@ public class RandomPlayer extends Player{
     GameState Game;
     String Name;
     
-    public RandomPlayer(GameState Game){
-        this.Name = "Random Player";
+    public RandomPlayer(String Name, GameState Game){
+        this.Name = Name;
         this.rng = new Random();
         this.Game = Game;
     }

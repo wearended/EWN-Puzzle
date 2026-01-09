@@ -20,13 +20,9 @@ public class AIPlayer extends Player{
     GameState Game;
     String Name;
     
-    public AIPlayer(){
-        this.Name = "AI Player";
-    }
-
-    @Override
-    public void JoinGame(GameState JoiningGame){
-        Game = JoiningGame;
+    public AIPlayer(String Name, GameState Game){
+        this.Name = Name;
+        this.Game = Game;
     }
 
     @Override

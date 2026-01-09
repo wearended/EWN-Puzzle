@@ -15,16 +15,12 @@ public class HumanPlayer extends Player{
     Scanner sc = new Scanner(System.in);
     GameState Game;
     String Name;
-    
-    public HumanPlayer(String Name){
+
+    public HumanPlayer(String Name, GameState Game){
         this.Name = Name;
+        this.Game = Game;
     }
-
-    @Override
-    public void JoinGame(GameState JoiningGame){
-        Game = JoiningGame;
-    }
-
+    
     @Override
     public int choosePiece(boolean[] MovablePieces){
         int chosenPiece = 0;
