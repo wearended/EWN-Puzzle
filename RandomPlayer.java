@@ -16,11 +16,14 @@ public class RandomPlayer extends Player{
     GameState Game;
     String Name;
     
-    public RandomPlayer(String Name, GameState Game){
-        this.Name = Name;
+    public RandomPlayer(String PlayerName, GameState PlayerGame){
+        this.Name = PlayerName;
+        this.Game = PlayerGame;
         this.rng = new Random();
-        this.Game = Game;
     }
+
+    @Override
+    public String getName() {return Name;}
 
     @Override
     public int choosePiece(boolean[] MovablePieces){
@@ -30,6 +33,8 @@ public class RandomPlayer extends Player{
             chosenPiece = rng.nextInt(6);
             if (MovablePieces[chosenPiece]) break;
         }
+
+        System.out.println("Random Player Chose Piece #" + (chosenPiece + 1));
 
         return chosenPiece;
     }
@@ -43,7 +48,7 @@ public class RandomPlayer extends Player{
             if (Game.isMoveValid(chosenMove, PiecePossibleMoves)) break;
         }
 
-        System.out.println("\nRandom Player Chose: " + chosenMove);
+        System.out.println("Random Player Chose Move: " + chosenMove);
 
         return chosenMove;
     }

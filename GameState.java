@@ -2,13 +2,23 @@ import java.io.*;
 
 public class GameState {
 
+    GameLoader Loader;
     int TargetPiece;
     int[] PiecePositions;
     int[] DiceSequence;
-    int DiceRolls;
+    int MoveCount;
     PrintWriter LevelWriter;
 
     static int[] IllegalPositions = {22};
+
+    public GameState(GameLoader Loader) {
+        this.Loader = Loader;
+        this.MoveCount = 0;
+        this.TargetPiece = Loader.TargetPiece;
+        this.PiecePositions = Loader.PiecePositions;
+        this.DiceSequence = Loader.DiceSequence;
+        this.LevelWriter = Loader.LevelWriter;
+    }
 
     public boolean[] getMovablePieces(int DiceRoll){
         boolean[] movablePieces = new boolean[PiecePositions.length];
@@ -32,13 +42,6 @@ public class GameState {
         return movablePieces;
     }
 
-    public GameState(GameLoader Loader) {
-        this.TargetPiece = Loader.TargetPiece;
-        this.PiecePositions = Loader.PiecePositions;
-        this.DiceSequence = Loader.DiceSequence;
-        this.LevelWriter = Loader.LevelWriter;
-    }
-
     public int isWinning(){
         int TargetPiecePosition = PiecePositions[TargetPiece];
 
@@ -48,7 +51,7 @@ public class GameState {
 
         if (TargetPiecePosition == 0) return 1;
         else if (TargetPiecePosition == -1) return -1;
-        else if (DiceRolls >= 30) return -1;
+        else if (MoveCount >= 30) return -1;
         else return 0;
     }
 
@@ -123,7 +126,15 @@ public class GameState {
     }
 
     public void applyMove(int ChosenPiece, int ChosenMove){
-
+        for (int Piece = 0; Piece < PiecePositions.length; Piece++){
+            if (ChosenPiece == Piece){
+                PiecePositions[Piece] = ChosenMove;
+            }
+            else if (ChosenMove == PiecePositions[Piece]){
+                PiecePositions[Piece] = -1; // Bro Gets Eaten!!!
+                System.out.println((ChosenPiece + 1) + " has eaten " + (Piece + 1));
+            }
+        }
     }
 
     public void startGame(Player NewPlayer) {
@@ -131,26 +142,38 @@ public class GameState {
         System.out.println("Target piece to win: Piece #" + TargetPiece);
         System.out.println("You have 30 moves maximum");
         
-        int MoveNumber = 1;
-        while (true) { 
-            int DiceRoll = DiceSequence[MoveNumber - 1];
-            System.out.println("\n--- Move #" + MoveNumber + " ---");
-            System.out.println("Dice roll: " + DiceRoll);
-
+        Loader.printGameDetails(NewPlayer.getName());
+        Player.printMove(LevelWriter, PiecePositions);
+        while (true) {
             if (isWinning() != 0) break;
+
+            int DiceRoll = DiceSequence[MoveCount];
+            System.out.println("--- Move #" + (MoveCount + 1) + " ---");
+            System.out.println("Dice roll: " + DiceRoll);
             
             boolean[] MovablePieces = getMovablePieces(DiceRoll);
             int[][] AllMoves = generatePossibleMoves(PiecePositions, DiceRoll);
             
+            System.out.print("Available Pieces: ");
+            for (int i = 0; i < MovablePieces.length; i++){
+                if (MovablePieces[i] == true){
+                    System.out.print((i + 1) + " ");
+                }
+            }
+            System.out.println("");
+
             Integer ChosenPiece = NewPlayer.choosePiece(MovablePieces);
             Integer ChosenMove = NewPlayer.chooseMove(AllMoves[ChosenPiece], ChosenPiece);
 
             applyMove(ChosenPiece, ChosenMove);
+            Player.printMove(LevelWriter, PiecePositions);
 
-            ++MoveNumber;
+            ++MoveCount;
         }
 
-        
+        System.out.println("\n=== GAME FINISHED ===");
+        System.out.println("Game Won: " + (isWinning() == 1));
+        System.out.println("Move Count: " + MoveCount);
 
         LevelWriter.close();
     }

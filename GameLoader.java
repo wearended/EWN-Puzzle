@@ -56,40 +56,21 @@ public class GameLoader {
         }
     }
 
-    public static boolean isMoveValid(int chosenMove, int[] PiecePossibleMoves){
-        boolean isValidMove = false;
-
-        if (chosenMove == -1) isValidMove = false;
-        else {
-            for (int i = 0; i < PiecePossibleMoves.length; i++){
-                if (chosenMove == PiecePossibleMoves[i]) {
-                    isValidMove = true;
-                    break;
-                }
-            }
-        }
-
-        return isValidMove;
-    }
-
-    public static void playMove(int PieceToMove, int TargetPosition, GameLoader Game){
-        for (int Piece = 0; Piece < Game.PiecePositions.length; Piece++){
-            if (PieceToMove == Piece){
-                Game.PiecePositions[Piece] = TargetPosition;
-            }
-            else if (TargetPosition == Game.PiecePositions[Piece]){
-                Game.PiecePositions[Piece] = -1; // Bro Gets Eaten!!!
-                System.out.println((PieceToMove + 1) + " has eaten " + (Piece + 1));
-            }
-        }
-    }
-
     public static boolean CanLoadLevel(int Level){
         File LevelFile = new File("TestCases\\level" + Level + ".txt");
         return LevelFile.exists();
     }
 
-    public void printGameDetails(){
+    public void printGameDetails(String PlayerName){
+        System.out.println("Player Name: " + PlayerName);
+        LevelWriter.println(PlayerName);
         
+        for (int i = 0; i < DiceSequence.length; i++){
+            System.out.print(DiceSequence[i] + " ");
+            LevelWriter.print(DiceSequence[i] + " ");
+        }
+
+        LevelWriter.print("\n" + (TargetPiece + 1));
+        System.out.println("\nTargetPiece: " + (TargetPiece + 1));
     }
 }

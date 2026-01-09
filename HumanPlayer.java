@@ -16,36 +16,31 @@ public class HumanPlayer extends Player{
     GameState Game;
     String Name;
 
-    public HumanPlayer(String Name, GameState Game){
-        this.Name = Name;
-        this.Game = Game;
+    public HumanPlayer(String PlayerName, GameState PlayerGame){
+        this.Name = PlayerName;
+        this.Game = PlayerGame;
     }
-    
+
+    @Override
+    public String getName() {return Name;}
+
     @Override
     public int choosePiece(boolean[] MovablePieces){
         int chosenPiece = 0;
-
-        System.out.println("\nAvailable Pieces: ");
-        for (int i = 0; i < MovablePieces.length; i++){
-            if (MovablePieces[i] == true){
-                System.out.println(i + 1);
-            }
-        }
 
         while (chosenPiece == 0) {
             System.out.print("Choose Piece to Move: ");
             chosenPiece = sc.nextInt() - 1;
 
             if (chosenPiece < 0 || chosenPiece + 1 > MovablePieces.length){
-               System.out.print("That piece is not available!: ");
+               System.out.println("That piece is not available!");
                 chosenPiece = 0;
             }
             else if (!MovablePieces[chosenPiece]) {
-                System.out.print("That piece is not available!: ");
+                System.out.println("That piece is not available!");
                 chosenPiece = 0;
             }
         }
-
         return chosenPiece;
     }
 
@@ -53,16 +48,17 @@ public class HumanPlayer extends Player{
     public int chooseMove(int[] PiecePossibleMoves, int ChosenPiece){
         int chosenMove;
         
-        System.out.println("\nPossible Moves Available: ");
+        System.out.println("Possible Moves Available: ");
         for (int i = 0; i < PiecePossibleMoves.length; i++){
             if (PiecePossibleMoves[i] != -1) System.out.print(PiecePossibleMoves[i] + " ");
         }
+        System.out.println("");
 
         while (true) {
             System.out.print("Choose Where to Move: ");
             chosenMove = sc.nextInt();
             if (Game.isMoveValid(chosenMove, PiecePossibleMoves)) break;
-            else System.out.print("Choose A Valid Move!");
+            else System.out.println("Choose A Valid Move!");
         }
 
         return chosenMove;

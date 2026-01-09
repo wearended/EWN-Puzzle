@@ -20,15 +20,19 @@ public class AIPlayer extends Player{
     GameState Game;
     String Name;
     
-    public AIPlayer(String Name, GameState Game){
-        this.Name = Name;
-        this.Game = Game;
+    public AIPlayer(String PlayerName, GameState PlayerGame){
+        this.Name = PlayerName;
+        this.Game = PlayerGame;
     }
+
+    @Override
+    public String getName() {return Name;}
 
     @Override
     public int choosePiece(boolean[] MovablePieces){
         int chosenPiece = 1;
 
+        System.out.println("Random Player Chose Piece #" + (chosenPiece + 1));
         return chosenPiece;
     }
 
@@ -36,8 +40,7 @@ public class AIPlayer extends Player{
     public int chooseMove(int[] PiecePossibleMoves, int ChosenPiece){
         int chosenMove = 0;
         
-        System.out.println("\nAI Player Chose: " + chosenMove);
-
+        System.out.println("AI Player Chose Move: " + chosenMove);
         return chosenMove;
     }
 }

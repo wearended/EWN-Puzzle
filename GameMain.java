@@ -42,7 +42,7 @@ public class GameMain {
         
         while (true){
             // Ask for level file
-            System.out.print("\nEnter Level: ");
+            System.out.print("Enter Level: ");
             int Level = input.nextInt();
             
             // Check Whether Level is available
