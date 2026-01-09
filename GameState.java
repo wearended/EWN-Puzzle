@@ -7,9 +7,8 @@ public class GameState {
     int[] PiecePositions;
     int[] DiceSequence;
     int MoveCount;
-    PrintWriter LevelWriter;
 
-    static int[] IllegalPositions = {22};
+    static final int[] IllegalPositions = {22};
 
     public GameState(GameLoader Loader) {
         this.Loader = Loader;
@@ -17,7 +16,6 @@ public class GameState {
         this.TargetPiece = Loader.TargetPiece;
         this.PiecePositions = Loader.PiecePositions;
         this.DiceSequence = Loader.DiceSequence;
-        this.LevelWriter = Loader.LevelWriter;
     }
 
     public boolean[] getMovablePieces(int DiceRoll){
@@ -110,19 +108,35 @@ public class GameState {
     }
 
     public boolean isMoveValid(int chosenMove, int[] PiecePossibleMoves){
-        boolean isValidMove = false;
-
-        if (chosenMove == -1) isValidMove = false;
+        if (chosenMove == -1) return false;
         else {
             for (int i = 0; i < PiecePossibleMoves.length; i++){
                 if (chosenMove == PiecePossibleMoves[i]) {
-                    isValidMove = true;
-                    break;
+                    return true;
                 }
             }
         }
 
-        return isValidMove;
+        return false;
+    }
+
+    public int countLivePieces(){
+        int Count = 0;
+        for (int Piece = 0; Piece < PiecePositions.length; Piece++) {
+            if (PiecePositions[Piece] != -1) {
+                Count++;
+            }
+        }
+        return Count;
+    }
+
+    public int pieceAtPosition(int Position){
+        for (int Piece = 0; Piece < PiecePositions.length; Piece++) {
+            if (PiecePositions[Piece] == Position) {
+                return Piece;
+            }
+        }
+        return -1;
     }
 
     public void applyMove(int ChosenPiece, int ChosenMove){
@@ -141,42 +155,44 @@ public class GameState {
         System.out.println("\n=== GAME SETUP ===");
         System.out.println("Target piece to win: Piece #" + TargetPiece);
         System.out.println("You have 30 moves maximum");
-        
-        Loader.printGameDetails(NewPlayer.getName());
-        Player.printMove(LevelWriter, PiecePositions);
-        while (true) {
-            if (isWinning() != 0) break;
 
-            int DiceRoll = DiceSequence[MoveCount];
-            System.out.println("--- Move #" + (MoveCount + 1) + " ---");
-            System.out.println("Dice roll: " + DiceRoll);
-            
-            boolean[] MovablePieces = getMovablePieces(DiceRoll);
-            int[][] AllMoves = generatePossibleMoves(PiecePositions, DiceRoll);
-            
-            System.out.print("Available Pieces: ");
-            for (int i = 0; i < MovablePieces.length; i++){
-                if (MovablePieces[i] == true){
-                    System.out.print((i + 1) + " ");
+        try (PrintWriter LevelWriter = new PrintWriter(new File("moves.txt"))) {
+            Loader.printGameDetails(LevelWriter, NewPlayer.getName());
+            Player.printMove(LevelWriter, PiecePositions, TargetPiece);
+            while (true) {
+                if (isWinning() != 0) break;
+
+                int DiceRoll = DiceSequence[MoveCount];
+                System.out.println("--- Move #" + (MoveCount + 1) + " ---");
+                System.out.println("Dice roll: " + DiceRoll);
+                
+                boolean[] MovablePieces = getMovablePieces(DiceRoll);
+                int[][] AllMoves = generatePossibleMoves(PiecePositions, DiceRoll);
+                
+                System.out.print("Available Pieces: ");
+                for (int i = 0; i < MovablePieces.length; i++){
+                    if (MovablePieces[i] == true){
+                        System.out.print((i + 1) + " ");
+                    }
                 }
+                System.out.println("");
+
+                Integer ChosenPiece = NewPlayer.choosePiece(MovablePieces);
+                Integer ChosenMove = NewPlayer.chooseMove(AllMoves[ChosenPiece], ChosenPiece);
+
+                applyMove(ChosenPiece, ChosenMove);
+                Player.printMove(LevelWriter, PiecePositions, TargetPiece);
+
+                ++MoveCount;
             }
-            System.out.println("");
 
-            Integer ChosenPiece = NewPlayer.choosePiece(MovablePieces);
-            Integer ChosenMove = NewPlayer.chooseMove(AllMoves[ChosenPiece], ChosenPiece);
+            System.out.println("\n=== GAME FINISHED ===");
+            System.out.println("Game Won: " + (isWinning() == 1));
+            System.out.println("Move Count: " + MoveCount);
 
-            applyMove(ChosenPiece, ChosenMove);
-            Player.printMove(LevelWriter, PiecePositions);
-
-            ++MoveCount;
+            LevelWriter.close();
+        } catch (FileNotFoundException e) {
+            System.out.println("Bro");
         }
-
-        System.out.println("\n=== GAME FINISHED ===");
-        System.out.println("Game Won: " + (isWinning() == 1));
-        System.out.println("Move Count: " + MoveCount);
-
-        LevelWriter.close();
     }
 }
-
-

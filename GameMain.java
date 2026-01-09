@@ -64,6 +64,7 @@ public class GameMain {
                         NewPlayer = new AIPlayer(PlayerName, NewGameState);
                     }
                 }
+                
                 NewGameState.startGame(NewPlayer);
                 break;
             } else {

@@ -1,20 +1,7 @@
 import java.util.Scanner;
 
 public class HumanPlayer extends Player{
-    // ============================================================
-    // TODO: Implement chooseMove()
-    // ------------------------------------------------------------
-    // This method prompts the human player to choose the next move
-    //
-    // You may decide on the return type, parameters, and logic.
-    // ============================================================
-
-    // You may also add any other helper functions, variables,
-    // and constructors needed for your implementation.
-
     Scanner sc = new Scanner(System.in);
-    GameState Game;
-    String Name;
 
     public HumanPlayer(String PlayerName, GameState PlayerGame){
         this.Name = PlayerName;
@@ -26,20 +13,19 @@ public class HumanPlayer extends Player{
 
     @Override
     public int choosePiece(boolean[] MovablePieces){
-        int chosenPiece = 0;
+        int chosenPiece;
 
-        while (chosenPiece == 0) {
+        while (true) {
             System.out.print("Choose Piece to Move: ");
             chosenPiece = sc.nextInt() - 1;
 
             if (chosenPiece < 0 || chosenPiece + 1 > MovablePieces.length){
                System.out.println("That piece is not available!");
-                chosenPiece = 0;
             }
             else if (!MovablePieces[chosenPiece]) {
                 System.out.println("That piece is not available!");
-                chosenPiece = 0;
             }
+            else break;
         }
         return chosenPiece;
     }
