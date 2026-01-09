@@ -41,14 +41,22 @@ public class GameMain {
             }
         }
         
-        // Ask for level file
-        System.out.print("\nEnter Level: ");
-        int Level = input.nextInt();
+        while (true){
+            // Ask for level file
+            System.out.print("\nEnter Level: ");
+            int Level = input.nextInt();
+            
+            // Check Whether Level is available
+            if (GameLoader.CanLoadLevel(Level)){
+                // Start the game
+                GameLoader Game = new GameLoader(Level);
+                GameState NewGameState = new GameState(Game);
+                NewGameState.startGame(NewPlayer);
+            } else {
+                System.out.println("Sorry, level isn't available!");
+            }
+        }
         
-        // Start the game
-        GameLoader Game = new GameLoader("TestCases\\level" + Level + ".txt");
-        GameState NewGameState = new GameState(Game);
-        NewGameState.startGame(NewPlayer);
         
         input.close();
     }
