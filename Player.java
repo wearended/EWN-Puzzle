@@ -22,6 +22,9 @@ public abstract class Player {
     // You may also add any other helper functions, variables,
     // and constructors needed for your implementation.
 
+    String Name;
+    GameState Game;
+
     static void printMove(PrintWriter writer, int[] PiecePositions){
         System.out.println("");
         writer.println("");
@@ -52,6 +55,7 @@ public abstract class Player {
         }
     }
 
+    abstract String getName();
     abstract int chooseMove(int[] PossibleMoves, int ChosenPiece);
     abstract int choosePiece(boolean[] MovablePieces);
 }
