@@ -131,8 +131,6 @@ public class GameState {
         System.out.println("Target piece to win: Piece #" + TargetPiece);
         System.out.println("You have 30 moves maximum");
         
-        NewPlayer.JoinGame(this);
-
         int MoveNumber = 1;
         while (true) { 
             int DiceRoll = DiceSequence[MoveNumber - 1];

@@ -22,10 +22,6 @@ public abstract class Player {
     // You may also add any other helper functions, variables,
     // and constructors needed for your implementation.
 
-    GameState Game;
-
-    abstract void JoinGame(GameState Game);
-
     static void printMove(PrintWriter writer, int[] PiecePositions){
         System.out.println("");
         writer.println("");

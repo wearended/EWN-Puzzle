@@ -14,7 +14,7 @@ public class GameMain {
         System.out.println("2. Let computer play randomly");
         System.out.println("3. Let computer AI play");
 
-        Player NewPlayer;
+        String PlayerName = "Unnamed";
         while (Choice == -1) {
             System.out.print("Select Game Mode: ");
             Choice = input.nextInt();
@@ -22,16 +22,15 @@ public class GameMain {
             switch(Choice) {
                 case 1 ->  {
                     System.out.print("Enter Player Name: ");
-                    String Name = input.next();
-                    NewPlayer = new HumanPlayer(Name);
+                    PlayerName = input.next();
                     break;
                 }
                 case 2 ->  {
-                    NewPlayer = new RandomPlayer();
+                    PlayerName = "Random Player";
                     break;
                 }
                 case 3 ->  {
-                    NewPlayer = new AIPlayer();
+                    PlayerName = "AI Player";
                     break;
                 }
                 default -> {
@@ -51,13 +50,27 @@ public class GameMain {
                 // Start the game
                 GameLoader Game = new GameLoader(Level);
                 GameState NewGameState = new GameState(Game);
+                Player NewPlayer;
+                switch(Choice) {
+                    case 1 ->  {
+                        NewPlayer = new HumanPlayer(PlayerName, NewGameState);
+                        break;
+                    }
+                    case 2 ->  {
+                        NewPlayer = new RandomPlayer(PlayerName, NewGameState);
+                        break;
+                    }
+                    default -> {
+                        NewPlayer = new AIPlayer(PlayerName, NewGameState);
+                    }
+                }
                 NewGameState.startGame(NewPlayer);
+                break;
             } else {
-                System.out.println("Sorry, level isn't available!");
+                System.out.println("Sorry, this level isn't available!");
             }
         }
-        
-        
+
         input.close();
     }
 }
