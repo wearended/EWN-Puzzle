@@ -13,8 +13,6 @@ public class RandomPlayer extends Player{
     // and constructors needed for your implementation.
 
     Random rng;
-    GameState Game;
-    String Name;
     
     public RandomPlayer(String PlayerName, GameState PlayerGame){
         this.Name = PlayerName;

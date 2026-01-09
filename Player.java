@@ -25,7 +25,14 @@ public abstract class Player {
     String Name;
     GameState Game;
 
-    static void printMove(PrintWriter writer, int[] PiecePositions){
+    public static final String ANSI_BLUE = "\u001B[34m";
+    public static final String ANSI_CYAN = "\u001B[36m";
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_RESET = "\u001B[0m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_PURPLE = "\u001B[35m";
+
+    static void printMove(PrintWriter writer, int[] PiecePositions, int TargetPiece){
         System.out.println("");
         writer.println("");
 
@@ -40,11 +47,28 @@ public abstract class Player {
                     }
                 }
 
+                boolean IsIllegal = false;
+                for (int i = 0; i < GameState.IllegalPositions.length; i++) {
+                    if (GameState.IllegalPositions[i] == Position) {
+                        IsIllegal = true;
+                        break;
+                    }
+                }
+
                 if (PieceOverHere != -1){
-                    System.out.printf("%2s%d", "_", ++PieceOverHere);
+                    String ANSI = ANSI_BLUE;
+                    if (PieceOverHere == TargetPiece) ANSI = ANSI_PURPLE;
+                    System.out.printf(ANSI + "%2s%d", "_", ++PieceOverHere);
                 }
                 else {
-                    System.out.printf("%3d", Position);
+                    String ANSI = ANSI_RESET;
+                    if (Position == 0) {
+                        ANSI = ANSI_GREEN;
+                    }
+                    else if (IsIllegal) {
+                        ANSI = ANSI_RED;
+                    }
+                    System.out.printf(ANSI + "%3d", Position);
                 }
             }
             System.out.print("\n");
